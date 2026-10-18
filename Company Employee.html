@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Employee workspace for The Common Room." />
+    <title>Employee dashboard · The Common Room</title>
+<style>
+  
+</style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="shell top-actions">
+        <a class="brand" href="{{ url_for('company_employee_dashboard') }}">
+          <span class="brand-mark">CR</span>
+          <span>
+            <strong>The Common Room</strong>
+            <small>Employee workspace</small>
+          </span>
+        </a>
+        <div class="top-actions">
+          <a href="{{ url_for('club_frontend') }}">Open club portal</a>
+          <details class="account-menu">
+            <summary>{{ company_employee["name"] }}</summary>
+            <div class="account-popover">
+              <span>Employee</span>
+              <small>{{ company_employee["email"] }}</small>
+              <form method="post" action="{{ url_for('company_admin_logout') }}">
+                <button class="button secondary" type="submit">Sign out</button>
+              </form>
+            </div>
+          </details>
+        </div>
+      </div>
+    </header>
+
+    <main class="shell">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">EMPLOYEE WORKSPACE</p>
+          <h1>Welcome, {{ company_employee["name"].split()[0] }}.</h1>
+          <p>Your company account and workspace details.</p>
+        </div>
+        <aside class="command-card">
+          <p class="eyebrow">Your access</p>
+          <h2>One place for your company workspace.</h2>
+          <p class="pulse"><i></i> {{ company_employee["status"] }} account</p>
+        </aside>
+      </section>
+
+      <section class="workspace">
+        <article class="panel">
+          <div class="panel-head"><h2>My account</h2></div>
+          <div class="health-item">
+            <span class="health-icon good">✓</span>
+            <span><strong>{{ company_employee["name"] }}</strong><small>Name</small></span>
+          </div>
+          <div class="health-item">
+            <span class="health-icon good">@</span>
+            <span><strong>{{ company_employee["email"] }}</strong><small>Company email</small></span>
+          </div>
+          <div class="health-item">
+            <span class="health-icon good">✓</span>
+            <span><strong>Employee</strong><small>Role</small></span>
+          </div>
+        </article>
+        <article class="panel">
+          <div class="panel-head"><h2>Quick actions</h2></div>
+          <div class="quick-list">
+            <a class="quick-action" href="{{ url_for('club_frontend') }}"><b>↗</b><span><strong>Open club portal</strong><small>View the member-facing experience</small></span></a>
+          </div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

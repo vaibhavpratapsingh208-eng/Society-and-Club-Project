@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Company-wide society operations dashboard for The Common Room." />
+    <title>Company super admin · The Common Room</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #17221e;
+        --muted: #718078;
+        --paper: #f5f6f1;
+        --white: #fff;
+        --line: #dfe5dc;
+        --green: #246b55;
+        --green-dark: #194d3d;
+        --lime: #d7ed77;
+        --amber: #a97617;
+        --red: #a7453f;
+        --shadow: 0 18px 45px rgba(31, 53, 42, .08);
+        --radius: 12px;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: var(--paper); color: var(--ink); font: 14px/1.55 'Manrope', sans-serif; }
+      a { color: inherit; text-decoration: none; }
+      button, input { font: inherit; }
+      .shell { width: min(1200px, calc(100% - 56px)); margin: 0 auto; }
+      .topbar { position: sticky; top: 0; z-index: 5; border-bottom: 1px solid rgba(223, 229, 220, .8); background: rgba(245, 246, 241, .94); backdrop-filter: blur(14px); }
+      .topbar-inner { display: flex; min-height: 76px; align-items: center; justify-content: space-between; gap: 24px; }
+      .brand { display: inline-flex; align-items: center; gap: 12px; }
+      .brand-mark { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 11px; background: var(--green); color: #fff; font: 500 13px 'DM Mono', monospace; }
+      .brand strong, .brand small { display: block; }
+      .brand strong { font-size: 14px; letter-spacing: -.3px; }
+      .brand small { color: var(--muted); font-size: 11px; }
+      .nav, .top-actions, .account { display: flex; align-items: center; }
+      .nav { gap: 24px; color: #536158; font-size: 12px; }
+      .nav a:hover, .top-actions > a:hover { color: var(--green); }
+      .top-actions { gap: 16px; }
+      .account { gap: 10px; padding-left: 16px; border-left: 1px solid var(--line); }
+      .avatar { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 50%; background: #e5edda; color: var(--green-dark); font-size: 11px; font-weight: 800; }
+      .account-copy strong, .account-copy small { display: block; }
+      .account-copy strong { font-size: 11px; }
+      .account-copy small { color: var(--muted); font-size: 10px; }
+      .logout { border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 11px; }
+      .logout:hover { color: var(--red); }
+      main { padding-bottom: 64px; }
+      .hero { display: flex; align-items: end; justify-content: space-between; gap: 28px; padding: 48px 0 26px; }
+      .eyebrow { margin: 0 0 10px; color: var(--green); font: 500 10px 'DM Mono', monospace; letter-spacing: 1.4px; text-transform: uppercase; }
+      h1, h2, p { margin-top: 0; }
+      h1 { margin-bottom: 9px; font-size: clamp(30px, 4vw, 43px); line-height: 1.12; letter-spacing: -1.8px; }
+      .hero-copy > p:last-child { max-width: 620px; margin-bottom: 0; color: var(--muted); }
+      .hero-meta { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 11px; white-space: nowrap; }
+      .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #62a776; box-shadow: 0 0 0 4px #e3efe2; }
+      .button { display: inline-flex; min-height: 40px; align-items: center; justify-content: center; gap: 8px; padding: 0 15px; border: 1px solid var(--green); border-radius: 7px; background: var(--green); color: #fff; font-size: 11px; font-weight: 700; transition: background .18s, transform .18s; }
+      .button:hover { transform: translateY(-1px); background: var(--green-dark); }
+      .button.secondary { border-color: var(--line); background: #fff; color: var(--ink); }
+      .button.secondary:hover { border-color: #bdcec0; background: #f9fbf7; }
+      .flash { margin: 12px 0 0; padding: 11px 14px; border: 1px solid #efc5bf; border-radius: 8px; background: #fff4f1; color: #8c3932; font-size: 12px; }
+      .notice { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 18px; padding: 13px 16px; border: 1px solid #ead6a8; border-radius: 9px; background: #fff9e9; color: #785615; font-size: 12px; }
+      .notice strong { display: block; margin-bottom: 2px; }
+      .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin: 10px 0 22px; }
+      .metric, .panel { border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); box-shadow: 0 5px 18px rgba(31, 53, 42, .025); }
+      .metric { padding: 19px 20px 17px; }
+      .metric-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--muted); font-size: 11px; }
+      .metric-icon { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 8px; background: #eef4e8; color: var(--green); font: 500 12px 'DM Mono', monospace; }
+      .metric-value { display: block; margin: 9px 0 1px; font-size: 29px; line-height: 1.15; letter-spacing: -1px; }
+      .metric-note { color: var(--muted); font-size: 10px; }
+      .layout { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(285px, .85fr); align-items: start; gap: 18px; }
+      .stack { display: grid; gap: 18px; }
+      .panel { min-width: 0; overflow: hidden; }
+      .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 19px 21px 15px; border-bottom: 1px solid #edf0ea; }
+      .panel-head h2 { margin: 0; font-size: 14px; letter-spacing: -.25px; }
+      .panel-head p { margin: 4px 0 0; color: var(--muted); font-size: 10px; }
+      .panel-link { color: var(--green); font-size: 10px; font-weight: 700; }
+      .society-list { padding: 0 20px; }
+      .society-row { display: grid; grid-template-columns: 39px minmax(0, 1fr) minmax(80px, .55fr) minmax(75px, .45fr) auto; align-items: center; gap: 13px; padding: 15px 2px; border-bottom: 1px solid #edf0ea; }
+      .society-row:last-child { border-bottom: 0; }
+      .society-mark { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 10px; background: #eff3e9; color: var(--green); font: 500 11px 'DM Mono', monospace; }
+      .society-name { min-width: 0; }
+      .society-name strong, .society-name small, .society-stat strong, .society-stat small { display: block; }
+      .society-name strong { overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+      .society-name small, .society-stat small { color: var(--muted); font-size: 9px; }
+      .society-stat strong { font-size: 11px; font-weight: 700; }
+      .status { display: inline-flex; align-items: center; gap: 5px; justify-self: end; padding: 5px 8px; border-radius: 999px; background: #edf5ec; color: #3d7650; font-size: 9px; font-weight: 700; white-space: nowrap; }
+      .status::before { width: 5px; height: 5px; border-radius: 50%; background: currentColor; content: ''; }
+      .status.review { background: #fff6e4; color: var(--amber); }
+      .status.unavailable { background: #fff0ed; color: var(--red); }
+      .empty { padding: 25px 2px; color: var(--muted); font-size: 11px; }
+      .activity-list { padding: 4px 20px 8px; }
+      .activity-row { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 11px; padding: 12px 0; border-bottom: 1px solid #edf0ea; }
+      .activity-row:last-child { border: 0; }
+      .activity-mark { display: grid; width: 27px; height: 27px; place-items: center; border-radius: 50%; background: #f0f4e9; color: var(--green); font: 10px 'DM Mono', monospace; }
+      .activity-copy strong, .activity-copy small, .activity-copy time { display: block; }
+      .activity-copy strong { margin-bottom: 2px; font-size: 10px; }
+      .activity-copy small { color: #536158; font-size: 10px; line-height: 1.55; overflow-wrap: anywhere; }
+      .activity-copy time { margin-top: 4px; color: var(--muted); font: 9px 'DM Mono', monospace; }
+      .team-list { padding: 4px 20px; }
+      .team-row { display: flex; align-items: center; gap: 10px; padding: 11px 0; border-bottom: 1px solid #edf0ea; }
+      .team-row:last-child { border: 0; }
+      .team-avatar { display: grid; width: 31px; height: 31px; flex: 0 0 auto; place-items: center; border-radius: 50%; background: #f1eee3; color: #785615; font-size: 9px; font-weight: 800; }
+      .team-copy { min-width: 0; flex: 1; }
+      .team-copy strong, .team-copy small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .team-copy strong { font-size: 10px; }
+      .team-copy small { color: var(--muted); font-size: 9px; }
+      .team-role { color: var(--green); font: 9px 'DM Mono', monospace; }
+      .election-list { padding: 5px 20px 8px; }
+      .election-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid #edf0ea; }
+      .election-row:last-child { border: 0; }
+      .election-copy { min-width: 0; }
+      .election-copy strong, .election-copy small { display: block; }
+      .election-copy strong { overflow-wrap: anywhere; font-size: 10px; }
+      .election-copy small { margin-top: 3px; color: var(--muted); font-size: 9px; }
+      .election-votes { flex: 0 0 auto; color: var(--green); font: 10px 'DM Mono', monospace; text-align: right; }
+      .election-votes small { display: block; margin-top: 3px; color: var(--muted); font: 9px 'Manrope', sans-serif; }
+      .quick-actions { display: grid; gap: 9px; padding: 16px 20px 19px; }
+      .quick-action { display: flex; align-items: center; gap: 11px; padding: 11px; border: 1px solid #edf0ea; border-radius: 8px; transition: border-color .18s, background .18s; }
+      .quick-action:hover { border-color: #c9d8c9; background: #f9fbf7; }
+      .quick-icon { display: grid; width: 31px; height: 31px; flex: 0 0 auto; place-items: center; border-radius: 8px; background: #eef4e8; color: var(--green); font-size: 13px; }
+      .quick-action strong, .quick-action small { display: block; }
+      .quick-action strong { font-size: 10px; }
+      .quick-action small { color: var(--muted); font-size: 9px; }
+      footer { padding: 18px 0; border-top: 1px solid var(--line); color: var(--muted); font: 9px 'DM Mono', monospace; }
+      .login-page { display: grid; min-height: 100vh; grid-template-columns: minmax(0, 1fr) minmax(380px, .8fr); }
+      .login-story { display: flex; flex-direction: column; justify-content: space-between; padding: clamp(34px, 7vw, 84px); background: radial-gradient(ellipse at 25% 20%, #315846 0%, #14241d 70%); color: #fff; }
+      .login-story .brand-mark { background: var(--lime); color: var(--ink); }
+      .login-story .brand small { color: rgba(255,255,255,.65); }
+      .story-copy { max-width: 550px; padding: 60px 0; }
+      .story-copy .eyebrow { color: var(--lime); }
+      .story-copy h1 { max-width: 500px; font-size: clamp(40px, 6vw, 68px); letter-spacing: -3px; }
+      .story-copy p:last-child { max-width: 420px; margin: 18px 0 0; color: rgba(255,255,255,.68); line-height: 1.8; }
+      .story-foot { color: rgba(255,255,255,.5); font: 10px 'DM Mono', monospace; }
+      .login-side { display: grid; place-items: center; padding: 30px; }
+      .login-card { width: min(100%, 390px); }
+      .login-card h2 { margin: 0 0 8px; font-size: 26px; letter-spacing: -1px; }
+      .login-card > p { margin: 0 0 28px; color: var(--muted); font-size: 12px; }
+      .login-card label { display: block; margin: 16px 0 6px; font-size: 10px; font-weight: 700; }
+      .login-card input { width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: 7px; outline: none; background: #fff; }
+      .login-card input:focus { border-color: #90ae8f; box-shadow: 0 0 0 3px #e7efe2; }
+      .login-card button { width: 100%; min-height: 45px; margin-top: 22px; }
+      .login-back { display: inline-block; margin-top: 18px; color: var(--green); font-size: 11px; font-weight: 700; }
+      :focus-visible { outline: 3px solid #a9c96a; outline-offset: 3px; }
+      @media (max-width: 900px) {
+        .nav { gap: 13px; }
+        .layout { grid-template-columns: minmax(0, 1fr) minmax(260px, .75fr); }
+        .society-row { grid-template-columns: 38px minmax(0, 1fr) minmax(64px, .4fr) auto; }
+        .society-stat:nth-of-type(3) { display: none; }
+      }
+      @media (max-width: 680px) {
+        .shell { width: min(100% - 32px, 560px); }
+        .topbar-inner { min-height: 66px; }
+        .nav { display: none; }
+        .account { padding-left: 0; border: 0; }
+        .account-copy { display: none; }
+        .hero { align-items: flex-start; flex-direction: column; padding-top: 34px; }
+        .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+        .metric { padding: 15px; }
+        .metric-value { font-size: 25px; }
+        .layout { grid-template-columns: 1fr; }
+        .society-row { grid-template-columns: 36px minmax(0, 1fr) auto; gap: 10px; }
+        .society-stat { display: none; }
+        .society-mark { width: 35px; height: 35px; }
+        .login-page { grid-template-columns: 1fr; }
+        .login-story { min-height: 280px; padding: 25px 24px; }
+        .story-copy { padding: 38px 0 18px; }
+        .story-copy h1 { font-size: 42px; }
+        .story-foot { display: none; }
+        .login-side { padding: 42px 24px; }
+      }
+      @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    </style>
+  </head>
+  <body>
+    {% if company_login %}
+    <main class="login-page">
+      <section class="login-story">
+        <a class="brand" href="{{ url_for('company_admin_login') }}">
+          <span class="brand-mark">CR</span>
+          <span><strong>The Common Room</strong><small>Company workspace</small></span>
+        </a>
+        <div class="story-copy">
+          <p class="eyebrow">COMPANY SUPER ADMIN</p>
+          <h1>Every community, one clear view.</h1>
+          <p>Sign in to oversee society operations, membership, elections and the people building The Common Room.</p>
+        </div>
+        <p class="story-foot">COMPANY OPERATIONS · PRIVATE ACCESS</p>
+      </section>
+      <section class="login-side">
+        <form class="login-card" method="post" action="{{ url_for('company_admin_login') }}">
+          <p class="eyebrow">ADMINISTRATOR ACCESS</p>
+          <h2>Welcome back</h2>
+          <p>Use your company account to open the founder dashboard.</p>
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+              <div class="flash" role="alert">{{ message }}</div>
+            {% endfor %}
+          {% endwith %}
+          <label for="email">Company email</label>
+          <input id="email" name="email" type="email" autocomplete="username" required />
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required />
+          <button class="button" type="submit">Sign in to company workspace <span aria-hidden="true">→</span></button>
+          <a class="login-back" href="{{ url_for('club_frontend') }}">Back to the club portal</a>
+        </form>
+      </section>
+    </main>
+    {% else %}
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="brand" href="{{ url_for('company_admin_page') }}">
+          <span class="brand-mark">CR</span>
+          <span><strong>The Common Room</strong><small>Founder workspace</small></span>
+        </a>
+        <nav class="nav" aria-label="Dashboard sections">
+          <a href="#overview">Overview</a>
+          <a href="#societies">Societies</a>
+          <a href="#activity">Activity</a>
+          <a href="#team">Company team</a>
+        </nav>
+        <div class="top-actions">
+          <div class="account">
+            <span class="avatar">{{ company_employee["name"][:2]|upper }}</span>
+            <span class="account-copy"><strong>{{ company_employee["name"] }}</strong><small>Company super admin</small></span>
+          </div>
+          <form method="post" action="{{ url_for('company_admin_logout') }}">
+            <button class="logout" type="submit">Sign out</button>
+          </form>
+        </div>
+      </div>
+    </header>
+    <main id="overview" class="shell">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">COMPANY SUPER ADMIN · {{ dashboard_date.strftime("%d %b %Y")|upper }}</p>
+          <h1>Good to see you, {{ company_employee["name"].split()[0] }}.</h1>
+          <p>Your company-wide view of society health, memberships, live elections and the latest activity.</p>
+        </div>
+        <div class="hero-meta"><span class="live-dot"></span> Platform overview</div>
+      </section>
+
+      {% if company_metrics["unavailable_societies"] %}
+      <aside class="notice" role="status">
+        <span aria-hidden="true">!</span>
+        <span><strong>Some workspace data could not be loaded.</strong>
+          {{ company_metrics["unavailable_societies"] }} society database(s) are unavailable. Summary totals include only workspaces whose data could be read; affected societies are marked below.</span>
+      </aside>
+      {% endif %}
+
+      <section class="metrics" aria-label="Company metrics">
+        <article class="metric">
+          <div class="metric-top"><span>Registered societies</span><span class="metric-icon">01</span></div>
+          <strong class="metric-value">{{ company_metrics["societies"] }}</strong>
+          <span class="metric-note">Across the company platform</span>
+        </article>
+        <article class="metric">
+          <div class="metric-top"><span>Active members</span><span class="metric-icon">02</span></div>
+          <strong class="metric-value">{{ "{:,}".format(company_metrics["members"]) }}{% if company_metrics["unavailable_societies"] %}+{% endif %}</strong>
+          <span class="metric-note">{% if company_metrics["unavailable_societies"] %}Known members · partial total{% else %}Across all societies{% endif %}</span>
+        </article>
+        <article class="metric">
+          <div class="metric-top"><span>Open elections</span><span class="metric-icon">03</span></div>
+          <strong class="metric-value">{{ company_metrics["open_elections"] }}</strong>
+          <span class="metric-note">Currently accepting votes</span>
+        </article>
+        <article class="metric">
+          <div class="metric-top"><span>Pending nominations</span><span class="metric-icon">04</span></div>
+          <strong class="metric-value">{{ company_metrics["pending_nominations"] }}</strong>
+          <span class="metric-note">Awaiting society admin review</span>
+        </article>
+      </section>
+
+      <section class="layout">
+        <div class="stack">
+          <article class="panel" id="societies">
+            <div class="panel-head">
+              <div><h2>Society portfolio</h2><p>Every registered club and its current operational pulse.</p></div>
+              <a class="panel-link" href="{{ url_for('society_registration_page') }}">Onboard a society ↗</a>
+            </div>
+            <div class="society-list">
+              {% for society in societies %}
+              <div class="society-row">
+                <span class="society-mark">{{ society["name"][:2]|upper }}</span>
+                <span class="society-name">
+                  <strong>{{ society["name"] }}</strong>
+                  <small>{{ society["category"] or "Community" }}{% if society["city"] %} · {{ society["city"] }}{% endif %}</small>
+                </span>
+                <span class="society-stat"><strong>{% if society["members"] is none %}—{% else %}{{ society["members"] }}{% endif %}</strong><small>active members</small></span>
+                <span class="society-stat"><strong>{% if society["open_elections"] is none %}—{% else %}{{ society["open_elections"] }}{% endif %}</strong><small>open elections</small></span>
+                <span class="status{% if society['health'] == 'Needs review' %} review{% elif society['health'] == 'Unavailable' %} unavailable{% endif %}">{{ society["health"] }}</span>
+              </div>
+              {% else %}
+              <p class="empty">No societies have been registered yet.</p>
+              {% endfor %}
+            </div>
+          </article>
+
+          <article class="panel" id="activity">
+            <div class="panel-head">
+              <div><h2>Recent society activity</h2><p>The latest audit events reported across workspaces.</p></div>
+              <span class="panel-link">AUDIT FEED</span>
+            </div>
+            <div class="activity-list">
+              {% for item in recent_activity %}
+              <div class="activity-row">
+                <span class="activity-mark" aria-hidden="true">↗</span>
+                <span class="activity-copy">
+                  <strong>{{ item["society"] }} · {{ item["action"].replace("_", " ")|title }}</strong>
+                  <small>{{ item["details"] }}</small>
+                  <time>{{ item["created_at"] or "Time not recorded" }}</time>
+                </span>
+              </div>
+              {% else %}
+              <p class="empty">No recent society activity to show.</p>
+              {% endfor %}
+            </div>
+          </article>
+        </div>
+
+        <aside class="stack">
+          <article class="panel">
+            <div class="panel-head">
+              <div><h2>Live elections</h2><p>Ballots accepting votes right now.</p></div>
+              <span class="panel-link">{{ live_elections|length }} LIVE</span>
+            </div>
+            <div class="election-list">
+              {% for election in live_elections %}
+              <div class="election-row">
+                <span class="election-copy">
+                  <strong>{{ election["title"] }}</strong>
+                  <small>{{ election["society"] }} · closes {{ election["closes_on"] }}</small>
+                </span>
+                <span class="election-votes">{{ election["votes"] }}<small>votes</small></span>
+              </div>
+              {% else %}
+              <p class="empty">No elections are accepting votes today.</p>
+              {% endfor %}
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div><h2>Company team</h2><p>{{ company_metrics["active_team"] }} active company accounts</p></div>
+              <a class="panel-link" href="{{ url_for('company_hr_dashboard') }}">View team ↗</a>
+            </div>
+            <div class="team-list" id="team">
+              {% for person in company_team[:4] %}
+              <div class="team-row">
+                <span class="team-avatar">{{ person["name"][:2]|upper }}</span>
+                <span class="team-copy"><strong>{{ person["name"] }}</strong><small>{{ person["email"] }}</small></span>
+                <span class="team-role">{{ "HR" if person["role"] in ["Society Manager", "HR", "Human Resources"] else "ADMIN" if person["role"] in ["Company Super Admin", "Company Admin"] else "SUPPORT" }}</span>
+              </div>
+              {% else %}
+              <p class="empty">No company accounts found.</p>
+              {% endfor %}
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head"><div><h2>Quick access</h2><p>Common founder workspace destinations.</p></div></div>
+            <div class="quick-actions">
+              <a class="quick-action" href="{{ url_for('company_hr_dashboard') }}">
+                <span class="quick-icon" aria-hidden="true">◎</span>
+                <span><strong>People &amp; access</strong><small>Review company roles and account status</small></span>
+              </a>
+              <a class="quick-action" href="{{ url_for('society_registration_page') }}">
+                <span class="quick-icon" aria-hidden="true">＋</span>
+                <span><strong>Society onboarding</strong><small>Start a new club registration</small></span>
+              </a>
+              <a class="quick-action" href="{{ url_for('club_frontend') }}">
+                <span class="quick-icon" aria-hidden="true">↗</span>
+                <span><strong>Open club portal</strong><small>Visit the member-facing platform</small></span>
+              </a>
+            </div>
+          </article>
+        </aside>
+      </section>
+    </main>
+    <footer><div class="shell">THE COMMON ROOM · COMPANY OPERATIONS</div></footer>
+    {% endif %}
+  </body>
+</html>

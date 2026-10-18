@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="en">
+  <link>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A considered home for your club's membership, elections, and everyday governance." />
+    <meta name="theme-color" content="#f5f6f1" />
+    <title>Register a club or society · The Common Room</title>
+      <style>
+          :root {
+        color-scheme: light;
+        --ink: #17221e;
+        --muted: #718078;
+        --paper: #f5f6f1;
+        --white: #fff;
+        --line: #dfe5dc;
+        --green: #246b55;
+        --lime: #d7ed77;
+        --shadow: 0 18px 45px rgba(31, 53, 42, 0.08);
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background:
+          radial-gradient(ellipse at 88% 2%, rgba(215, 237, 119, .15), transparent 29rem),
+          var(--paper);
+        color: var(--ink);
+        font: 14px/1.6 Manrope, sans-serif;
+      }
+      a { color: inherit; }
+      .shell { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        min-height: 78px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        border-bottom: 1px solid var(--line);
+        background: rgba(245, 246, 241, .94);
+        backdrop-filter: blur(14px);
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .brand-mark {
+        padding: 10px 9px;
+        border-radius: 5px;
+        background: var(--ink);
+        color: var(--lime);
+        font: 500 13px "DM Mono", monospace;
+      }
+      .brand b, .brand small { display: block; }
+      .brand b { font-size: 13px; }
+      .brand small { color: var(--muted); font-size: 10px; }
+      .top-actions { display: flex; align-items: center; gap: 22px; }
+      .top-nav { display: flex; align-items: center; gap: 20px; }
+      .top-nav a, .menu-panel a {
+        position: relative;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: color 180ms ease, transform 180ms ease;
+      }
+      .top-nav a::after {
+        position: absolute;
+        right: 0;
+        bottom: -8px;
+        left: 0;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--green);
+        content: "";
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 200ms ease;
+      }
+      .top-nav a:hover, .top-nav a[aria-current="location"], .menu-panel a:hover { color: var(--green); }
+      .top-nav a:hover::after, .top-nav a[aria-current="location"]::after { transform: scaleX(1); }
+      .top-link { color: var(--green); font-size: 12px; font-weight: 800; text-decoration: none; white-space: nowrap; }
+      .mobile-menu { display: none; position: relative; }
+      .mobile-menu summary { color: var(--green); font-size: 11px; font-weight: 800; cursor: pointer; }
+      .menu-panel {
+        position: absolute;
+        z-index: 5;
+        top: calc(100% + 12px);
+        right: 0;
+        display: grid;
+        min-width: 180px;
+        gap: 13px;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: var(--white);
+        box-shadow: var(--shadow);
+      }
+      .button-link {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 16px;
+        border: 1px solid var(--ink);
+        border-radius: 5px;
+        background: var(--ink);
+        color: var(--white);
+        font-size: 11px;
+        font-weight: 800;
+        text-decoration: none;
+        transition: background-color 160ms ease, transform 160ms ease;
+      }
+      .button-link:hover { transform: translateY(-1px); background: var(--green); }
+      .hero-cta { margin-top: 25px; }
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(360px, .82fr);
+        gap: clamp(35px, 7vw, 86px);
+        align-items: center;
+        padding: 72px 0 64px;
+      }
+      .eyebrow, .mono { font: 11px "DM Mono", monospace; letter-spacing: .8px; }
+      .eyebrow { color: var(--green); text-transform: uppercase; }
+      h1 {
+        max-width: 650px;
+        margin: 17px 0;
+        font-size: clamp(42px, 6vw, 68px);
+        line-height: 1.03;
+        letter-spacing: -3px;
+      }
+      .hero-copy { max-width: 570px; color: var(--muted); font-size: 15px; line-height: 1.85; }
+      .hero-points { display: grid; gap: 13px; margin: 27px 0 0; padding: 0; list-style: none; }
+      .hero-points li { display: flex; align-items: center; gap: 11px; font-size: 12px; font-weight: 700; }
+      .check {
+        display: inline-grid;
+        width: 23px;
+        height: 23px;
+        place-items: center;
+        border-radius: 50%;
+        background: #e6efd4;
+        color: var(--green);
+        font-size: 12px;
+      }
+      .card {
+        padding: clamp(24px, 4vw, 38px);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, .94);
+        box-shadow: var(--shadow);
+      }
+      .card h2 { margin: 9px 0 5px; font-size: 25px; letter-spacing: -.7px; }
+      .card-intro { margin: 0 0 23px; color: var(--muted); font-size: 12px; }
+      .checklist {
+        margin: 0 0 20px;
+        padding: 13px 15px;
+        border: 1px solid #e5eadf;
+        border-radius: 6px;
+        background: #f7f9f3;
+      }
+      .checklist b { display: block; margin-bottom: 6px; font-size: 11px; }
+      .checklist ul { display: flex; flex-wrap: wrap; gap: 6px 15px; margin: 0; padding: 0; list-style: none; }
+      .checklist li { color: var(--muted); font-size: 10px; }
+      .checklist li::before { content: "✓"; margin-right: 5px; color: var(--green); font-weight: 800; }
+      .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+      fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+      fieldset[hidden] { display: none; }
+      .field { display: grid; gap: 7px; min-width: 0; }
+      .field.full { grid-column: 1 / -1; }
+      label { color: #53635a; font-size: 10px; font-weight: 800; letter-spacing: .65px; }
+      input, select {
+        width: 100%;
+        min-height: 45px;
+        padding: 11px 12px;
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        background: #fbfcfa;
+        color: var(--ink);
+        font: 13px Manrope, sans-serif;
+      }
+      input:focus, select:focus { border-color: var(--green); outline: 3px solid rgba(36, 107, 85, .12); }
+      .hint { color: var(--muted); font-size: 10px; }
+      .form-progress { display: grid; gap: 8px; margin: 0 0 20px; color: var(--muted); font: 10px "DM Mono", monospace; }
+      .progress-track { height: 5px; overflow: hidden; border-radius: 5px; background: #e7ece4; }
+      .progress-track i { display: block; width: 50%; height: 100%; border-radius: inherit; background: var(--green); transition: width 180ms ease; }
+      .step-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 7px; }
+      .step-button {
+        min-height: 44px;
+        padding: 10px 16px;
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        background: var(--white);
+        color: var(--green);
+        font: 800 11px Manrope, sans-serif;
+        cursor: pointer;
+      }
+      .step-button.primary { border-color: var(--ink); background: var(--ink); color: var(--white); }
+      .step-button:hover { border-color: var(--green); background: var(--green); color: var(--white); }
+      .consent { display: flex; align-items: flex-start; gap: 9px; color: var(--muted); font-size: 10px; line-height: 1.7; }
+      .consent input { flex: 0 0 16px; width: 16px; min-height: 16px; margin: 2px 0 0; accent-color: var(--green); }
+      .submit {
+        width: 100%;
+        min-height: 47px;
+        margin-top: 5px;
+        border: 0;
+        border-radius: 5px;
+        background: var(--ink);
+        color: var(--white);
+        font: 800 12px Manrope, sans-serif;
+        cursor: pointer;
+      }
+      .submit:hover { background: var(--green); }
+      .submit:disabled { cursor: wait; opacity: .65; }
+      .feedback { min-height: 18px; margin: 0; color: #9c4b35; font-size: 11px; }
+      .privacy { margin: 13px 0 0; color: var(--muted); font-size: 10px; }
+      .success {
+        margin-top: 16px;
+        padding: 17px;
+        border: 1px solid #cddfbb;
+        border-radius: 6px;
+        background: #f1f7e9;
+      }
+      .success[hidden] { display: none; }
+      .success h3 { margin: 0 0 5px; font-size: 16px; }
+      .success p { margin: 0 0 12px; color: var(--muted); font-size: 11px; }
+      .success ol { margin: 0 0 14px; padding-left: 18px; color: var(--ink); font-size: 11px; line-height: 1.9; }
+      .club-code {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px;
+        border: 1px solid #dfe8d5;
+        border-radius: 5px;
+        background: var(--white);
+      }
+      .club-code strong { overflow-wrap: anywhere; font: 12px "DM Mono", monospace; }
+      .copy {
+        flex: 0 0 auto;
+        border: 0;
+        background: transparent;
+        color: var(--green);
+        font: 800 10px Manrope, sans-serif;
+        cursor: pointer;
+      }
+      .workspace-link {
+        display: block;
+        margin-top: 13px;
+        color: var(--green);
+        font-size: 11px;
+        font-weight: 800;
+        text-align: center;
+        text-decoration: none;
+      }
+      .workspace-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .workspace-actions .workspace-link {
+        padding: 11px 12px;
+        border: 1px solid var(--green);
+        border-radius: 5px;
+        background: var(--green);
+        color: var(--white);
+        transition: transform 160ms ease, background-color 160ms ease;
+      }
+      .workspace-actions .workspace-link:hover { transform: translateY(-1px); background: var(--ink); }
+      .workspace-actions .workspace-link.secondary { background: var(--white); color: var(--green); }
+      .workspace-actions .workspace-link.secondary:hover { background: #edf2e8; }
+      .section { padding: 58px 0; border-top: 1px solid var(--line); }
+      .section-heading { max-width: 650px; margin-bottom: 25px; }
+      .section-heading h2 { margin: 10px 0; font-size: clamp(27px, 4vw, 38px); letter-spacing: -1.3px; }
+      .section-heading p { color: var(--muted); line-height: 1.8; }
+      .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+      .feature {
+        min-height: 176px;
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: rgba(255, 255, 255, .7);
+      }
+      .feature-number { color: var(--green); font: 11px "DM Mono", monospace; }
+      .feature h3 { margin: 15px 0 7px; font-size: 15px; }
+      .feature p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.8; }
+      .role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+      .role-card {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--white);
+        box-shadow: 0 10px 28px rgba(31, 53, 42, .04);
+      }
+      .role-window { padding: 12px 15px; border-bottom: 1px solid var(--line); background: #f8faf6; }
+      .role-window { position: relative; overflow: hidden; }
+      .role-window::after {
+        position: absolute;
+        inset: 0 auto 0 -60%;
+        width: 40%;
+        background: linear-gradient(90deg, transparent, rgba(215, 237, 119, .3), transparent);
+        content: "";
+        animation: preview-sheen 7s ease-in-out infinite;
+      }
+      .window-dots { display: flex; gap: 4px; margin-bottom: 10px; }
+      .window-dots i { width: 6px; height: 6px; border-radius: 50%; background: #cbd4c8; }
+      .role-card:nth-child(2) .role-window::after { animation-delay: 1.2s; }
+      .role-card:nth-child(3) .role-window::after { animation-delay: 2.4s; }
+      .role-window span { color: var(--green); font: 10px "DM Mono", monospace; text-transform: uppercase; }
+      .role-content { padding: 17px; }
+      .role-content h3 { margin: 0 0 5px; font-size: 15px; }
+      .role-content > p { margin: 0 0 14px; color: var(--muted); font-size: 10px; }
+      .role-item { display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); font-size: 10px; }
+      .role-item { animation: dashboard-row-in 500ms both; }
+      .role-item:nth-child(2) { animation-delay: 100ms; }
+      .role-item:nth-child(3) { animation-delay: 220ms; }
+      .role-item:nth-child(4) { animation-delay: 340ms; }
+      .role-card { transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease; }
+      .role-card:hover { transform: translateY(-4px); border-color: #cbd8c8; box-shadow: 0 18px 38px rgba(31, 53, 42, .09); }
+      .role-item span:last-child { color: var(--green); font: 9px "DM Mono", monospace; }
+      @keyframes preview-sheen {
+        0%, 18% { transform: translateX(0); opacity: 0; }
+        25% { opacity: 1; }
+        45%, 100% { transform: translateX(420%); opacity: 0; }
+      }
+      @keyframes dashboard-row-in {
+        from { opacity: 0; transform: translateY(6px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .preview-note { margin: 15px 0 0; color: var(--muted); font-size: 10px; }
+      .cta-band {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 28px;
+        border-radius: 8px;
+        background: var(--ink);
+        color: var(--white);
+      }
+      .cta-band h2 { margin: 0 0 5px; font-size: 20px; }
+      .cta-band p { margin: 0; color: #c8d2cb; font-size: 11px; }
+      .cta-band .button-link { flex: 0 0 auto; border-color: var(--lime); background: var(--lime); color: var(--ink); }
+      .cta-band .button-link:hover { background: #e4f49f; }
+      .journal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+      .journal-card {
+        min-height: 245px;
+        padding: 21px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: var(--white);
+        box-shadow: 0 10px 28px rgba(31, 53, 42, .04);
+      }
+      .journal-meta { color: var(--green); font: 10px "DM Mono", monospace; letter-spacing: .5px; }
+      .journal-card h3 { margin: 14px 0 8px; font-size: 16px; line-height: 1.4; }
+      .journal-card > p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.8; }
+      .journal-card summary {
+        display: inline-block;
+        margin-top: 17px;
+        color: var(--green);
+        font-size: 11px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .journal-card summary:hover { text-decoration: underline; }
+      .journal-story { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+      .journal-story p, .journal-story li { color: var(--muted); font-size: 11px; line-height: 1.8; }
+      .journal-story p { margin: 0 0 8px; }
+      .journal-story ul { margin: 0; padding-left: 18px; }
+      .editorial-note { margin-top: 15px; color: var(--muted); font-size: 10px; }
+      .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; counter-reset: step; }
+      .step { position: relative; padding: 4px 0 0 46px; }
+      .step:before {
+        counter-increment: step;
+        content: "0" counter(step);
+        position: absolute;
+        left: 0;
+        top: 1px;
+        color: var(--green);
+        font: 12px "DM Mono", monospace;
+      }
+      .step h3 { margin: 0 0 6px; font-size: 13px; }
+      .step p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.8; }
+      .faq { display: grid; gap: 10px; }
+      .faq details { padding: 15px 17px; border: 1px solid var(--line); border-radius: 6px; background: rgba(255,255,255,.7); }
+      .faq summary { cursor: pointer; font-size: 12px; font-weight: 800; }
+      .faq p { margin: 9px 0 0; color: var(--muted); font-size: 11px; line-height: 1.8; }
+      .policy-copy { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      .policy-card, .support-card {
+        padding: 20px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: rgba(255,255,255,.72);
+      }
+      .policy-card h3, .support-card h3 { margin: 0 0 8px; font-size: 14px; }
+      .policy-card p, .support-card p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.8; }
+      .support-card a { display: inline-block; margin-top: 12px; color: var(--green); font-size: 11px; font-weight: 800; }
+      .policy-note { margin-top: 13px; color: var(--muted); font-size: 10px; }
+      footer { padding: 24px 0 34px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
+      .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+      .footer-links { display: flex; flex-wrap: wrap; gap: 14px; }
+      .footer-links a { color: var(--muted); text-decoration: none; }
+      .footer-links a:hover { color: var(--green); }
+      :focus-visible { outline: 3px solid #a9c96a; outline-offset: 3px; }
+      [id] { scroll-margin-top: 24px; }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          scroll-behavior: auto !important;
+          animation-duration: .01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: .01ms !important;
+        }
+      }
+      @media (max-width: 850px) {
+        .hero { grid-template-columns: 1fr; gap: 28px; padding: 47px 0; }
+        .features, .journal-grid, .role-grid { grid-template-columns: 1fr 1fr; }
+        .steps { grid-template-columns: 1fr; gap: 24px; }
+        .top-nav { gap: 12px; }
+        .top-nav a { font-size: 10px; }
+      }
+      @media (max-width: 540px) {
+        .shell { width: min(100% - 28px, 1160px); }
+        .topbar { min-height: 67px; }
+        .top-actions { gap: 12px; }
+        .top-nav { display: none; }
+        .mobile-menu { display: block; }
+        .top-link { font-size: 10px; }
+        .hero { padding: 38px 0; }
+        h1 { letter-spacing: -2px; }
+        .form-grid, .features, .journal-grid, .role-grid, .policy-copy { grid-template-columns: 1fr; }
+        .field.full { grid-column: auto; }
+        .card { padding: 23px 18px; }
+        .section { padding: 42px 0; }
+        .cta-band, .footer-row { align-items: flex-start; flex-direction: column; }
+        .cta-band .button-link { width: 100%; }
+        .workspace-actions { grid-template-columns: 1fr; gap: 2px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="shell top-actions">
+        <a class="brand" href="{{ url_for('club_frontend') }}" aria-label="The Common Room home">
+          <span class="brand-mark">CR</span>
+          <span>
+            <b>The Common Room</b>
+            <small>Membership, made meaningful</small>
+          </span>
+        </a>
+        <div class="top-actions">
+          <nav class="top-nav" aria-label="Main navigation">
+            <a href="#features">Platform</a>
+            <a href="#journal">Field notes</a>
+            <a href="#faq">Questions</a>
+          </nav>
+          <details class="mobile-menu">
+            <summary>Menu</summary>
+            <nav class="menu-panel" aria-label="Mobile navigation">
+              <a href="#features">Platform</a>
+              <a href="#journal">Field notes</a>
+              <a href="#faq">Questions</a>
+            </nav>
+          </details>
+          <a class="top-link" href="{{ url_for('club_frontend') }}">Member sign in ↗</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="shell">
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">A better home for belonging</p>
+          <h1 id="page-title">Register a club or society</h1>
+          <p class="hero-copy">
+            Everything your club needs to run well. Bring your people, decisions,
+            and shared purpose into one considered space—built for the people
+            who make a community.
+          </p>
+          <ul class="hero-points">
+            <li><span class="check" aria-hidden="true">✓</span> A clear, trusted member directory</li>
+            <li><span class="check" aria-hidden="true">✓</span> Elections that are simple and transparent</li>
+            <li><span class="check" aria-hidden="true">✓</span> One calm workspace for your committee</li>
+          </ul>
+          <a class="button-link hero-cta" href="#register">Register your society <span aria-hidden="true">↗</span></a>
+        </div>
+
+        <section class="card" id="register" aria-labelledby="register-title">
+          <p class="eyebrow">Your new chapter starts here</p>
+          <h2 id="register-title">Create your workspace</h2>
+          <p class="card-intro">A few details now. A better way to run things from here on.</p>
+
+          <div class="checklist">
+            <b>Before you begin, have these ready</b>
+            <ul>
+              <li>Your society name and location</li>
+              <li>An administrator email</li>
+              <li>A password for your new workspace</li>
+            </ul>
+          </div>
+
+          <form id="societyForm" novalidate>
+            <div class="form-progress">
+              <div class="progress-track" role="progressbar" aria-label="Registration progress" aria-valuemin="1" aria-valuemax="2" aria-valuenow="1">
+                <i id="progressFill"></i>
+              </div>
+              <span id="stepLabel">STEP 01 / 02 · SOCIETY DETAILS</span>
+            </div>
+
+            <fieldset id="societyStep">
+              <legend class="hint">Tell us a little about your community.</legend>
+              <div class="form-grid">
+                <div class="field full">
+                  <label for="societyName">Society or club name</label>
+                  <input id="societyName" name="society_name" type="text" maxlength="120" autocomplete="organization" placeholder="e.g. The Garden Society" required />
+                </div>
+                <div class="field">
+                  <label for="category">Community type</label>
+                  <select id="category" name="category" required>
+                    <option value="" selected disabled>Select a type</option>
+                    <option>Student Society</option>
+                    <option>Community Club</option>
+                    <option>Sports Club</option>
+                    <option>Cultural Association</option>
+                    <option>Professional Association</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="city">City</label>
+                  <input id="city" name="city" type="text" maxlength="100" autocomplete="address-level2" placeholder="e.g. Jaipur" required />
+                </div>
+                <div class="field full">
+                  <label for="address">Street address <span class="hint">(optional)</span></label>
+                  <input id="address" name="address" type="text" maxlength="250" autocomplete="street-address" placeholder="Your club's meeting place" />
+                </div>
+                <div class="field">
+                  <label for="contactPhone">Club contact number <span class="hint">(optional)</span></label>
+                  <input id="contactPhone" name="contact_phone" type="tel" maxlength="30" autocomplete="tel" placeholder="+91 98765 00000" />
+                </div>
+                <div class="field">
+                  <label for="memberCount">Estimated members</label>
+                  <input id="memberCount" name="member_count_estimate" type="number" min="1" max="1000000" step="1" placeholder="e.g. 120" required />
+                </div>
+              </div>
+              <div class="step-actions">
+                <span></span>
+                <button class="step-button primary" id="continueButton" type="button">Continue to administrator →</button>
+              </div>
+            </fieldset>
+
+            <fieldset id="adminStep" hidden>
+              <legend class="hint">Set up the administrator for this workspace.</legend>
+              <div class="form-grid">
+                <div class="field full">
+                  <label for="adminName">Administrator's full name</label>
+                  <input id="adminName" name="name" type="text" autocomplete="name" placeholder="e.g. Aanya Mehta" required />
+                </div>
+                <div class="field">
+                  <label for="adminEmail">Email address</label>
+                  <input id="adminEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
+                </div>
+                <div class="field">
+                  <label for="confirmEmail">Confirm email address</label>
+                  <input id="confirmEmail" name="confirm_email" type="email" autocomplete="off" placeholder="Enter your email again" required />
+                </div>
+                <div class="field full">
+                  <label for="adminPhone">Personal phone <span class="hint">(optional)</span></label>
+                  <input id="adminPhone" name="phone" type="tel" autocomplete="tel" placeholder="+91 98765 00000" />
+                </div>
+                <div class="field">
+                  <label for="adminPassword">Create a password</label>
+                  <input id="adminPassword" name="password" type="password" minlength="8" autocomplete="new-password" placeholder="At least 8 characters" required />
+                </div>
+                <div class="field">
+                  <label for="confirmPassword">Confirm password</label>
+                  <input id="confirmPassword" name="confirm_password" type="password" minlength="8" autocomplete="new-password" placeholder="Enter it again" required />
+                </div>
+                <div class="field full">
+                  <label class="consent" for="termsAccepted">
+                    <input id="termsAccepted" name="terms_accepted" type="checkbox" required />
+                    <span>I’m authorised to register this club and create its administrator workspace. I understand that registration details will be used to provide this service.</span>
+                  </label>
+                </div>
+              </div>
+              <div class="step-actions">
+                <button class="step-button" id="backButton" type="button">← Back</button>
+                <button class="step-button primary" id="submitButton" type="submit">Create my society workspace</button>
+              </div>
+            </fieldset>
+
+            <p class="feedback" id="formFeedback" role="alert" aria-live="polite"></p>
+          </form>
+
+          <section class="success" id="successPanel" aria-labelledby="successTitle" hidden>
+            <h3 id="successTitle">Your workspace is ready.</h3>
+            <p>Keep this club code safe. Members will need it when they join your workspace.</p>
+            <ol>
+              <li>You’re signed in as Admin.</li>
+              <li>Invite your members with the club code below.</li>
+              <li>Start building your member register and first election.</li>
+            </ol>
+            <div class="club-code">
+              <strong id="clubCode"></strong>
+              <button class="copy" id="copyCode" type="button">COPY CODE</button>
+            </div>
+            <div class="workspace-actions">
+              <a class="workspace-link" href="/">Open admin dashboard</a>
+              <a class="workspace-link secondary" href="/club">Open club portal</a>
+            </div>
+          </section>
+          <p class="privacy">Your club details are used to create and operate this workspace. We don’t sell member data.</p>
+        </section>
+      </section>
+
+      <section class="section" id="features" aria-labelledby="features-title">
+        <div class="section-heading">
+          <p class="eyebrow">A thoughtful toolkit</p>
+          <h2 id="features-title">Good governance, without the busywork.</h2>
+          <p>Give your committee the simple tools to keep membership organised, decisions visible, and the next generation ready to lead.</p>
+        </div>
+        <div class="features">
+          <article class="feature">
+            <span class="feature-number">01 / PEOPLE</span>
+            <h3>Membership with a human touch</h3>
+            <p>Keep a searchable, up-to-date member register and make it easier for people to find their place.</p>
+          </article>
+          <article class="feature">
+            <span class="feature-number">02 / DECISIONS</span>
+            <h3>Fair elections, made clear</h3>
+            <p>Organise nominations and voting with a visible process that members can trust.</p>
+          </article>
+          <article class="feature">
+            <span class="feature-number">03 / STEWARDSHIP</span>
+            <h3>A record your committee can rely on</h3>
+            <p>Keep a clear audit trail of key changes, so important decisions don’t disappear into inboxes.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="dashboards-title">
+        <div class="section-heading">
+          <p class="eyebrow">One community, considered from every side</p>
+          <h2 id="dashboards-title">The right view for every role.</h2>
+          <p>Thoughtful spaces help members stay informed, candidates keep track, and administrators keep the whole club moving.</p>
+        </div>
+        <div class="role-grid">
+          <article class="role-card">
+            <div class="role-window"><div class="window-dots"><i></i><i></i><i></i></div><span>For your community</span></div>
+            <div class="role-content">
+              <h3>Member dashboard</h3>
+              <p>A simple place to participate and stay connected.</p>
+              <div class="role-item"><span>Upcoming election</span><span>OPEN</span></div>
+              <div class="role-item"><span>Cast a considered vote</span><span>PRIVATE</span></div>
+              <div class="role-item"><span>View club updates</span><span>READY</span></div>
+            </div>
+          </article>
+          <article class="role-card">
+            <div class="role-window"><div class="window-dots"><i></i><i></i><i></i></div><span>For future leaders</span></div>
+            <div class="role-content">
+              <h3>Candidate dashboard</h3>
+              <p>Keep every nomination and next step in view.</p>
+              <div class="role-item"><span>Your nomination</span><span>TRACKED</span></div>
+              <div class="role-item"><span>Election timeline</span><span>CLEAR</span></div>
+              <div class="role-item"><span>Member profile</span><span>YOURS</span></div>
+            </div>
+          </article>
+          <article class="role-card">
+            <div class="role-window"><div class="window-dots"><i></i><i></i><i></i></div><span>For your committee</span></div>
+            <div class="role-content">
+              <h3>Administrator dashboard</h3>
+              <p>See the records and responsibilities in one place.</p>
+              <div class="role-item"><span>Member register</span><span>ORGANISED</span></div>
+              <div class="role-item"><span>Election controls</span><span>IN HAND</span></div>
+              <div class="role-item"><span>Activity history</span><span>RECORDED</span></div>
+            </div>
+          </article>
+        </div>
+        <p class="preview-note">Interface previews are illustrative and represent the tools available within a registered workspace.</p>
+      </section>
+
+      <section class="section" id="journal" aria-labelledby="journal-title">
+        <div class="section-heading">
+          <p class="eyebrow">THE COMMON ROOM JOURNAL</p>
+          <h2 id="journal-title">Small practices. Stronger communities.</h2>
+          <p>Ideas for the people who make clubs and societies feel like somewhere you belong.</p>
+        </div>
+        <div class="journal-grid">
+          <article class="journal-card">
+            <span class="journal-meta">GOVERNANCE · 4 MIN READ</span>
+            <h3>Before the first ballot, agree on the rules</h3>
+            <p>Good elections begin well before voting opens. A shared timeline and clear expectations make participation easier for everyone.</p>
+            <details>
+              <summary>Read the field note</summary>
+              <div class="journal-story">
+                <p>Agree who can stand, when nominations close, how members vote, and when the result will be shared. Put those dates where every member can find them.</p>
+                <ul><li>Publish the process before nominations open.</li><li>Give candidates equal time and information.</li><li>Record the outcome for the next committee.</li></ul>
+              </div>
+            </details>
+          </article>
+          <article class="journal-card">
+            <span class="journal-meta">MEMBERSHIP · 3 MIN READ</span>
+            <h3>A welcome is the beginning of belonging</h3>
+            <p>A thoughtful first week can turn a new name on a list into a person who feels part of the group.</p>
+            <details>
+              <summary>Read the field note</summary>
+              <div class="journal-story">
+                <p>Tell new members what happens next, introduce the people they can ask for help, and make the next gathering easy to find.</p>
+                <ul><li>Share a short, friendly welcome.</li><li>Explain how decisions are made.</li><li>Offer a clear way to get involved.</li></ul>
+              </div>
+            </details>
+          </article>
+          <article class="journal-card">
+            <span class="journal-meta">COMMITTEE · 5 MIN READ</span>
+            <h3>Make the handover part of the work</h3>
+            <p>Keep knowledge with the club, not just with the person whose term is ending.</p>
+            <details>
+              <summary>Read the field note</summary>
+              <div class="journal-story">
+                <p>A small, current record of recurring tasks and important decisions gives new volunteers room to lead with confidence.</p>
+                <ul><li>Capture decisions while they’re fresh.</li><li>Keep access with the organisation.</li><li>Leave a clear next step for each open task.</li></ul>
+              </div>
+            </details>
+          </article>
+        </div>
+        <p class="editorial-note">These are illustrative editorial guides, not testimonials or claims about customer outcomes.</p>
+      </section>
+
+      <section class="section" aria-labelledby="steps-title">
+        <div class="section-heading">
+          <p class="eyebrow">A calm start</p>
+          <h2 id="steps-title">From registration to your first meeting.</h2>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <h3>Create your club workspace</h3>
+            <p>Share a few details about your society and set up its first administrator.</p>
+          </article>
+          <article class="step">
+            <h3>Invite your people</h3>
+            <p>Give members your unique club code so they can join the right community.</p>
+          </article>
+          <article class="step">
+            <h3>Make the next decision together</h3>
+            <p>Build your register, prepare an election, and make the process clear to all.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="faq" aria-labelledby="faq-title">
+        <div class="section-heading">
+          <p class="eyebrow">A few good questions</p>
+          <h2 id="faq-title">Before you get started.</h2>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>Who can register a club or society?</summary>
+            <p>An authorised representative can create the workspace and become its first administrator. Admin privileges are not available through ordinary member sign-up.</p>
+          </details>
+          <details>
+            <summary>What is the club code for?</summary>
+            <p>Your unique code helps members find and join the right society. Save it after registration and share it only with the people who should join.</p>
+          </details>
+          <details>
+            <summary>Can we update our details later?</summary>
+            <p>Registration creates your initial organisation record and administrator account. Contact your installation operator if you need help changing organisation details.</p>
+          </details>
+          <details>
+            <summary>Is the administrator email verified?</summary>
+            <p>The address is confirmed by re-entry during registration, but this version does not send an email or one-time verification code.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="section" id="policies" aria-labelledby="policies-title">
+        <div class="section-heading">
+          <p class="eyebrow">Clear expectations</p>
+          <h2 id="policies-title">A careful start for your club.</h2>
+        </div>
+        <div class="policy-copy">
+          <article class="policy-card">
+            <h3>Privacy overview</h3>
+            <p>We use the details you provide to create and operate your club workspace, administer member access, and support club governance. This overview is not a complete privacy policy; ask your installation operator for the applicable data-handling terms.</p>
+          </article>
+          <article class="policy-card">
+            <h3>Terms overview</h3>
+            <p>Register only for a club you are authorised to represent. Keep administrator credentials and the club code secure, and use member information only for legitimate club administration. This summary is not a complete terms of service.</p>
+          </article>
+        </div>
+        <p class="policy-note">Registration does not verify the administrator’s email address by email or OTP.</p>
+      </section>
+
+      <section class="section">
+        <div class="cta-band">
+          <div>
+            <h2>Make room for what brings you together.</h2>
+            <p>Give your community a thoughtful place to organise, decide, and grow.</p>
+          </div>
+          <a class="button-link" href="#register">Register your society <span aria-hidden="true">↗</span></a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="shell footer-row">
+        <span>The Common Room · Made for communities.</span>
+        <nav class="footer-links" aria-label="Footer">
+          <a href="#policies">Privacy overview</a>
+          <a href="#policies">Terms overview</a>
+          {% if support_email %}
+            <a href="mailto:{{ support_email|e }}">Contact support</a>
+            <span>No support email has been configured? Contact your installation operator.</span>
+          {% else %}
+            <span>No support email has been configured. Contact your installation operator for help.</span>
+          {% endif %}
+        </nav>
+      </div>
+      <div class="shell">
+        <p class="policy-note">Already have a workspace? If you’re signed in as Admin, <a href="/">open your admin dashboard</a> or <a href="/club">open the club portal</a>.</p>
+      </div>
+    </footer>
+    <script src="{{ url_for('static', filename='js/registration.js') }}" defer></script>
+  </body>
+</html>

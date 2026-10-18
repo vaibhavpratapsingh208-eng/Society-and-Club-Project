@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Human resources workspace for The Common Room." />
+    <title>HR dashboard · The Common Room</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/company.css') }}" />
+    <style>
+      .topbar { min-height: 76px; }
+      .topbar > .shell, main.shell { width: min(1160px, calc(100% - 56px)); }
+      .top-actions { gap: 24px; }
+      .account-menu summary { border: 1px solid var(--line); border-radius: 999px; padding: 9px 14px; transition: border-color .18s ease, background .18s ease; }
+      .account-menu summary:hover, .account-menu[open] summary { border-color: #b9cbbd; background: #fff; }
+      .account-popover { min-width: 245px; padding: 17px; }
+      .account-popover form { margin: 7px 0 0; }
+      .account-popover .button { width: 100%; }
+      .hero { align-items: stretch; gap: clamp(32px, 6vw, 76px); padding: 76px 0 42px; }
+      .hero-copy { align-self: center; }
+      .hero-copy > p:not(.eyebrow) { line-height: 1.8; }
+      .command-card { display: flex; min-height: 250px; flex-direction: column; justify-content: flex-end; padding: 30px; }
+      .command-card h2 { max-width: 290px; font-size: clamp(25px, 3vw, 34px); }
+      .workspace { align-items: start; gap: 18px; margin-top: 0; margin-bottom: 58px; }
+      .workspace > .panel { min-width: 0; }
+      .workspace > .panel:first-child { overflow: hidden; }
+      .workspace > .panel:last-child { background: linear-gradient(145deg, #fff 0%, #f4f7ef 100%); }
+      .panel { padding: 27px; transition: border-color .18s ease, box-shadow .18s ease; }
+      .panel:hover { border-color: #d2ddd0; }
+      .panel-head { gap: 12px; }
+      .panel-head h2 { font-size: 19px; }
+      .society-row { grid-template-columns: 42px minmax(0, 1fr) 95px auto; gap: 14px; padding: 17px 8px; transition: background-color .18s ease; }
+      .society-row:hover { background: #f8faf5; }
+      .society-mark { height: 42px; }
+      .society-name { min-width: 0; overflow-wrap: anywhere; }
+      .society-name strong { line-height: 1.5; }
+      .society-stat { text-align: left; }
+      .society-stat strong { color: var(--green); }
+      .status { justify-self: end; }
+      .empty-state { line-height: 1.85; }
+      :focus-visible { outline: 3px solid #a9c96a; outline-offset: 3px; }
+      @media (max-width: 900px) {
+        .hero { gap: 30px; padding-top: 56px; }
+        .workspace { grid-template-columns: 1fr; }
+        .command-card { min-height: 220px; }
+      }
+      @media (max-width: 760px) {
+        .topbar > .shell, main.shell { width: min(100% - 32px, 560px); }
+        .top-actions { gap: 12px; }
+        .hero { gap: 24px; padding: 46px 0 28px; }
+        .hero-copy > p:not(.eyebrow) { font-size: 15px; }
+        .panel { padding: 21px; }
+        .workspace { margin-bottom: 38px; }
+      }
+      @media (max-width: 480px) {
+        .society-row { grid-template-columns: 38px minmax(0, 1fr) auto; gap: 10px; padding: 14px 4px; }
+        .society-mark { height: 38px; }
+        .society-stat { display: none; }
+        .society-row .status { grid-column: 2 / -1; justify-self: start; margin-left: 0; }
+        .panel { padding: 18px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .society-row, .panel, .account-menu summary { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="shell top-actions">
+        <a class="brand" href="{{ url_for('company_hr_dashboard') }}">
+          <span class="brand-mark">CR</span>
+          <span>
+            <strong>The Common Room</strong>
+            <small>Human resources</small>
+          </span>
+        </a>
+        <div class="top-actions">
+          <a href="{{ url_for('club_frontend') }}">Open club portal</a>
+          <details class="account-menu">
+            <summary>{{ company_employee["name"] }}</summary>
+            <div class="account-popover">
+              <span>HR</span>
+              <small>{{ company_employee["email"] }}</small>
+              <form method="post" action="{{ url_for('company_admin_logout') }}">
+                <button class="button secondary" type="submit">Sign out</button>
+              </form>
+            </div>
+          </details>
+        </div>
+      </div>
+    </header>
+
+    <main class="shell">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">HUMAN RESOURCES</p>
+          <h1>People make the room.</h1>
+          <p>View company accounts and check each colleague's role and access status.</p>
+        </div>
+        <aside class="command-card">
+          <p class="eyebrow">HR workspace</p>
+          <h2>Company team directory.</h2>
+          <p class="pulse"><i></i> {{ employees|length }} company accounts</p>
+        </aside>
+      </section>
+
+      <section class="workspace">
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Company team</h2>
+            <span class="panel-link">{{ employees|length }} accounts</span>
+          </div>
+          <div class="society-list">
+            {% for person in employees %}
+            <div class="society-row">
+              <span class="society-mark">{{ person["name"][:2]|upper }}</span>
+              <span class="society-name">
+                <strong>{{ person["name"] }}</strong>
+                <small>{{ person["email"] }}</small>
+              </span>
+              <span class="society-stat"><strong>{{ person["role"] }}</strong><small>role</small></span>
+              <span class="status {% if person['status'] == 'Active' %}open{% else %}review{% endif %}">{{ person["status"] }}</span>
+            </div>
+            {% else %}
+            <p class="empty-state">No company accounts have been added yet.</p>
+            {% endfor %}
+          </div>
+        </article>
+        <article class="panel">
+          <div class="panel-head"><h2>Your workspace</h2></div>
+          <p class="empty-state">Signed in as {{ company_employee["name"] }}. Use this shared company login to access the HR team directory.</p>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
